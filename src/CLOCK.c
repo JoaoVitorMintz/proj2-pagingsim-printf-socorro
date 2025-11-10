@@ -1,16 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-
-struct Node {
-    int pagina;
-    bool uso;
-    struct Node* proximo;
-} Node;
-
-struct Clock {
-    Node* ponteiro;
-} Clock;
+#include "CLOCK.h"
 
 // Cria e inicializa uma nova estrutura CLOCK vazia
 Clock* criarClock() {

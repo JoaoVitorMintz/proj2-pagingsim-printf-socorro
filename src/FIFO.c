@@ -1,19 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
-
-struct Node {
-    int data;
-    struct Node* next;
-} Node;
-
-struct Queue {
-    Node* inicio;
-    Node* fim;
-} Queue;
+#include "FIFO.h"
 
 // Cria e inicializa uma nova fila vazia
-Queue criarFila() {
+Queue criarFila(int capacidade) {
     Queue* novaFila = (Queue*)malloc(sizeof(Queue));
     if (novaFila == NULL) {
         printf("Erro ao alocar memória para a fila!\n");// Facilitar depuração de erro na alocação (idealmente nunca aparecerá)
@@ -21,14 +12,29 @@ Queue criarFila() {
     }
     novaFila->inicio = NULL;
     novaFila->fim = NULL;
+    f->tamanho = 0;
+    f->capacidade = capacidade;
     return novaFila;
 }
 
 // Verifica se a fila está vazia
-boolean vazia(Queue* f) {
+bool vazia(Queue* f) {
     return (f->inicio == NULL);
 }
 
+// Verificar se está cheia
+bool cheia(Queue* f) {
+    return f->tamanho == f->capacidade;
+}
+
+bool contem(Queue* f, int pagina) {
+    Node* atual = f->inicio;
+    while (atual) {
+        if (atual->pagina == pagina) return true;
+        atual = atual->next;
+    }
+    return false;
+}
 
 // Inserir valor na fila
 void push(Queue* f, int dado) {
@@ -42,29 +48,26 @@ void push(Queue* f, int dado) {
 
     if (vazia(f)) {
         f->inicio = novoNo;
-        f->fim = novoNo;
     } else {
-        f->fim->proximo = novoNo; // o próximo do último nó atual aponta para o novo nó
-        f->fim = novoNo; // novo nó se torna o novo último nó
+        f->fim->next = novoNo; // o próximo do último nó atual aponta para o novo nó
     }
+    f->fim = novoNo; // novo nó se torna o novo último nó
+    f->tamanho++;
 }
 
 // Remover valor da fila
-void pop(Queue* f) {
+int pop(Queue* f) {
     if (vazia(f)) {
-        exit(1);
+        return -1;
     }
 
     Node* noARemover = f->inicio;
-    int dadoRemovido = noARemover->dado;
-    f->inicio = f->inicio->proximo;
-
-    if (f->inicio == NULL) { // Se fila ficou vazia, altera fim para NULL
-        f->fim = NULL;
-    }
+    int pagina = noARemover->pagina;
+    f->inicio = f->inicio->next;
 
     free(noARemover);
-    return dadoRemovido;
+    f->tamanho--;
+    return pagina;
 }
 
 // Liberar memória da fila
@@ -73,10 +76,4 @@ void liberaFila(Queue* f) {
         pop(f);
     }
     free(f);
-}
-
-int main() {
-    Queue* f = criarFila();
-
-    return 0;
 }
