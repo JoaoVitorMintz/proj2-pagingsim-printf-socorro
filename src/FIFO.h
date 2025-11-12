@@ -3,24 +3,23 @@
 
 #include <stdbool.h>
 
-typedef struct Node {
+typedef struct NodeQ {
     int pagina;
-    struct Node* next;
-} Node;
+    struct NodeQ* next;
+} NodeQ;
 
-typedef struct Queue {
-    Node* inicio;
-    Node* fim;
+typedef struct {
+    NodeQ* inicio;
+    NodeQ* fim;
     int tamanho;
     int capacidade;
 } Queue;
-
 
 Queue* criarFila(int capacidade);
 bool vazia(Queue* f);
 bool cheia(Queue* f);
 bool contem(Queue* f, int pagina);
-void push(Queue* f, int dado);
+void push(Queue* f, int pagina);
 int pop(Queue* f);
 void liberaFila(Queue* f);
 

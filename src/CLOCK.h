@@ -3,20 +3,20 @@
 
 #include <stdbool.h>
 
-typedef struct Node {
+typedef struct NodeC {
     int pagina;
     bool uso;
-    struct Node* proximo;
-} Node;
+    struct NodeC* proximo;
+} NodeC;
 
-typedef struct Clock {
-    Node* ponteiro;
+typedef struct {
+    NodeC* ponteiro;
 } Clock;
 
-Clock* criarClock();
-bool vazia(Clock* c);
-void push(Clock* c, int pagina);
-void pop(Clock* c, int novaPagina);
-void liberaClock(Clock* c);
+Clock* clock_criar();
+bool clock_vazia(Clock* c);
+void clock_push(Clock* c, int pagina);
+int clock_replace(Clock* c, int novaPagina); /* substitui e retorna página evict (ou -1) */
+void clock_libera(Clock* c);
 
 #endif
